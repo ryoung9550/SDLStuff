@@ -85,10 +85,10 @@ static void drawCircleFill(SDL_Surface* surf, const int &x, const int &y, const 
 	}
 }
 
-static void quit(SDL_Window* window, std::vector<SDL_Surface*>& surfaces) {
+static void quit(SDL_Window* window, std::vector<SDL_Surface*> surfaces) {
 	SDL_DestroyWindow(window);
-	for(int i = (int) surfaces.size(); i >= 0; --i) {
-		SDL_FreeSurface(surfaces[i]);
+	for(int i = 0; i < (int) surfaces.size(); ++i) {
+		SDL_FreeSurface(surfaces[0]);
 		printf("Delted object %d\n", i);
 	}
 	/*
@@ -199,7 +199,7 @@ int main()
 	rect.y = 20;
 	rect.w = 20;
 	rect.h = 20;
-	const Uint32 colorBlue = SDL_MapRGB(screenWindow->format, 0x0, 0xff, 0xff);  
+	//const Uint32 colorBlue = SDL_MapRGB(screenWindow->format, 0x0, 0xff, 0xff);  
 
 	// Main Game loop
 	while(running) 
