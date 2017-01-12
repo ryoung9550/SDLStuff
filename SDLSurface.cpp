@@ -1,6 +1,7 @@
 #include <SDL2/SDL.h>
 #include <string>
 #include <cstdio>
+#include <cstdlib>
 #include <cmath>
 #include <vector>
 
@@ -88,7 +89,7 @@ static void drawCircleFill(SDL_Surface* surf, const int &x, const int &y, const 
 static void quit(SDL_Window* window, std::vector<SDL_Surface*> surfaces) {
 	SDL_DestroyWindow(window);
 	for(int i = 0; i < (int) surfaces.size(); ++i) {
-		SDL_FreeSurface(surfaces[0]);
+		SDL_FreeSurface(surfaces[i]);
 		printf("Delted object %d\n", i);
 	}
 	/*
@@ -152,6 +153,8 @@ int main()
 {
 	Init(); // Initialize SDL2
 
+	srand(time(0)); // Sets seed for RNG
+
 	// Creates main window for the program
 	SDL_Window* window = SDL_CreateWindow("Lol chicken shit",
 												SDL_WINDOWPOS_UNDEFINED, // x window pos
@@ -182,14 +185,13 @@ int main()
 	loadMedia(textures, screenWindow);
 
 	// Adding all surfaces to allSurfaces vector
-	allSurfaces.push_back(screenWindow); 
 	allSurfaces.push_back(screenBuffer);
 	for( int i = 0; i < numTextureElms; ++i)
 		allSurfaces.push_back(textures[i]);
 	printf("The number of all textures: %ld\n", allSurfaces.size());
 	
 	int mx=10, my=10; // Starting mouse Coord 
-	const int FPS = 60; // Fixed framerate of the window
+	const int FPS = 999; // Fixed framerate of the window
 	bool running = true; // Game loop condiditon (false closes the program)
 	bool keyPressed = false; // States if a keyboard key has been pressed
 
@@ -199,7 +201,7 @@ int main()
 	rect.y = 20;
 	rect.w = 20;
 	rect.h = 20;
-	//const Uint32 colorBlue = SDL_MapRGB(screenWindow->format, 0x0, 0xff, 0xff);  
+	const Uint32 colorBlue = SDL_MapRGB(screenWindow->format, 0x0, 0xff, 0xff);  
 
 	// Main Game loop
 	while(running) 
@@ -207,7 +209,6 @@ int main()
 		Uint32 startTick = SDL_GetTicks(); // Marks the begining of the cycle
 
 		// Clears screenWindow
-		/*
 		if(SDL_FillRect(screenWindow, NULL, 0))
 		{
 			printf("Window Screen could not be cleared! ERROR: %s\n", SDL_GetError());
@@ -216,7 +217,6 @@ int main()
 		{
 			printf("Screen Buffer could not be cleared! ERROR: %s\n", SDL_GetError());
 		}
-		*/
 
 		// Event tracker
 		SDL_Event event;
@@ -262,15 +262,13 @@ int main()
 		
 
 		// Draws pixel onto screen
-		/*
-		if(!keyPressed)	
-		{
 		SDL_FillRect(screenBuffer, &rect, colorBlue);
 		drawLine(screenBuffer, mx, my, 400, 300);
 		// drawCircle(screenBuffer, mx, my, 200);
-		drawCircleFill(screenBuffer, mx, my, 300);
+		for(int i = 0; i < 20; ++i) 
+		{
+			drawCircleFill(screenBuffer, rand() % W, rand() % H, rand() % 50 + 10);
 		}
-		*/
 
 		// SDL_UnlockSurface(screenWindow); // Finalizes edits to surface
 

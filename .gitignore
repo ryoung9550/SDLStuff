@@ -33,3 +33,4 @@
 
 # Mac OS File
 .DS_Store
+*.swp
