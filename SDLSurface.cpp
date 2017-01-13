@@ -9,6 +9,35 @@
 #define H 600
 #define W 800
 
+int randRange(int low, int high) {
+	return rand() % (high - low + 1) + low;
+}
+
+class Circle {
+	int _x, _y, _r;
+public:
+	Circle() {}
+	Circle(int x, int y, int r) : _x(x), _y(y), _r(r) {}
+	void randomX(int low, int high) {
+		this->_x = randRange(low, high);
+	}
+	void randomY(int low, int high) {
+		this->_y = randRange(low, high);
+	}
+	void randomR(int low, int high) {
+		this->_r = randRange(low, high);
+	}
+	void randomCircle(int Xlow, int Xhigh, int Ylow, int Yhigh, int Rlow, int Rhigh) {
+		randomX(Xlow, Xhigh);
+		randomY(Ylow, Yhigh);
+		randomR(Rlow, Rhigh);
+	}
+	int getX() { return _x; }
+	int getY() { return _y; }
+	int getR() { return _r; }
+
+};
+
 static void drawPixel(SDL_Surface* surf, int xpos, int ypos, int red, int green, int blue) {
 	if( xpos >= 0 && xpos < surf->w && ypos >= 0 && ypos < surf->h)
 		((Uint32*)surf->pixels)[ypos * surf->pitch/4 + xpos] = SDL_MapRGB(surf->format, red, green, blue);
@@ -181,6 +210,12 @@ int main()
 	SDL_Surface* textures[numTextureElms]; // Surface array which holds all the textures for the program
 	std::vector<SDL_Surface*> allSurfaces; // Vector which holds all surfaces in the program
 
+	const int numCircleElms = 15;	// Number of Circle objects 
+	Circle circleArray[ numCircleElms ];
+	for(int i = 0; i < numCircleElms; ++i) {
+		circleArray[i].randomCircle(0, W, 0, H, 5, 20);	
+	}
+
 	// Loads all textures for the program into the textures surface pointer array
 	loadMedia(textures, screenWindow);
 
@@ -191,7 +226,7 @@ int main()
 	printf("The number of all textures: %ld\n", allSurfaces.size());
 	
 	int mx=10, my=10; // Starting mouse Coord 
-	const int FPS = 999; // Fixed framerate of the window
+	const int FPS = 60; // Fixed framerate of the window
 	bool running = true; // Game loop condiditon (false closes the program)
 	bool keyPressed = false; // States if a keyboard key has been pressed
 
@@ -265,9 +300,9 @@ int main()
 		SDL_FillRect(screenBuffer, &rect, colorBlue);
 		drawLine(screenBuffer, mx, my, 400, 300);
 		// drawCircle(screenBuffer, mx, my, 200);
-		for(int i = 0; i < 20; ++i) 
+		for(int i = 0; i < numCircleElms; ++i) 
 		{
-			drawCircleFill(screenBuffer, rand() % W, rand() % H, rand() % 50 + 10);
+			drawCircleFill(screenBuffer, circleArray[i].getX(), circleArray[i].getY(), circleArray[i].getR());
 		}
 
 		// SDL_UnlockSurface(screenWindow); // Finalizes edits to surface
